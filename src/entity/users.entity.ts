@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, Updat
 import { IsNotEmpty } from 'class-validator';
 import { User } from '../interfaces/users.interface';
 
-@Entity()
+@Entity('users')
 @Unique(['email'])
 export class UserEntity implements User {
   @PrimaryGeneratedColumn()

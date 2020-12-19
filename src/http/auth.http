@@ -15,8 +15,8 @@ Content-Type: application/json
 }
 
 ###
-# Login
-POST {{baseURL}}/login
+# signup
+POST {{baseURL}}/signup
 Content-Type: application/json
 
 {
@@ -25,11 +25,26 @@ Content-Type: application/json
 }
 
 ###
-# Logout
-POST {{baseURL}}/logout
+# Login
+POST {{baseURL}}/login
 Content-Type: application/json
 
 {
     "email": "lim@gmail.com",
 	"password": "q1w2e3r4"
+}
+###
+# Login
+POST {{baseURL}}/login
+Content-Type: application/json
+
+{
+    "email": "example@gmail.com",
+	"password": "qwer1234"
+}
+###
+# Logout
+POST {{baseURL}}/logout
+Content-Type: application/json
+{
 }
