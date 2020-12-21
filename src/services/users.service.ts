@@ -11,8 +11,7 @@ class UserService {
 
   public async findAllUser(): Promise<User[]> {
     const userRepository = getRepository(this.users);
-    const users: User[] = await userRepository.find();
-    return users;
+    return await userRepository.find();
   }
 
   public async findUserById(userId: number): Promise<User> {
@@ -31,9 +30,7 @@ class UserService {
     if (findUser) throw new HttpException(409, `You're email ${userData.email} already exists`);
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
-    const createUserData: User = await userRepository.save({ ...userData, password: hashedPassword });
-
-    return createUserData;
+    return await userRepository.save({ ...userData, password: hashedPassword });
   }
 
   public async updateUser(userId: number, userData: User): Promise<User> {
@@ -46,8 +43,7 @@ class UserService {
     const hashedPassword = await bcrypt.hash(userData.password, 10);
     await userRepository.update(userId, { ...userData, password: hashedPassword });
 
-    const updateUser: User = await userRepository.findOne({ where: { id: userId } });
-    return updateUser;
+    return await userRepository.findOne({ where: { id: userId } });
   }
 
   public async deleteUser(userId: number): Promise<User> {

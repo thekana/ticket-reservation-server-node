@@ -1,12 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 import { CreateUserDto } from '../dtos/users.dto';
 import { User } from '../interfaces/users.interface';
-import userService from '../services/users.service';
+import UserService from '../services/users.service';
+import { RequestHandler } from 'express';
 
 class UsersController {
-  public userService = new userService();
+  public userService = new UserService();
 
-  public getUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public getUsers: RequestHandler = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const findAllUsersData: User[] = await this.userService.findAllUser();
 

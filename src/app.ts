@@ -18,6 +18,7 @@ class App {
   public app: express.Application;
   public port: string | number;
   public env: string;
+  private basePath = '/api/v1';
 
   constructor(routes: Routes[]) {
     this.app = express();
@@ -70,7 +71,7 @@ class App {
 
   private initializeRoutes(routes: Routes[]) {
     routes.forEach(route => {
-      this.app.use('/', route.router);
+      this.app.use(this.basePath, route.router);
     });
   }
 
@@ -82,6 +83,7 @@ class App {
           version: '1.0.0',
           description: 'Example docs',
         },
+        basePath: this.basePath,
       },
       apis: ['swagger.yaml'],
     };
