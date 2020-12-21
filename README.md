@@ -18,7 +18,7 @@ POSTGRESQL_USERNAME=postgres
 POSTGRESQL_PASSWORD=postgres
 POSTGRESQL_DATABASE=ticket
 JWT_SECRET=jwt_secret
-PORT=3000
+PORT=9092
 ```
 
 ## Contributing
