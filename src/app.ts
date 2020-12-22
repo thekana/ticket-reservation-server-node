@@ -10,7 +10,6 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import { createConnection } from 'typeorm';
 import { dbConnection } from './database';
-import Routes from './interfaces/routes.interface';
 import errorMiddleware from './middlewares/error.middleware';
 import { logger, stream } from './utils/logger';
 
@@ -18,9 +17,8 @@ class App {
   public app: express.Application;
   public port: string | number;
   public env: string;
-  private basePath = '/api/v1';
 
-  constructor(routes: Routes[]) {
+  constructor(routes: express.Router[]) {
     this.app = express();
     this.port = process.env.PORT || 9092;
     this.env = process.env.NODE_ENV || 'development';
@@ -69,9 +67,9 @@ class App {
     this.app.use(cookieParser());
   }
 
-  private initializeRoutes(routes: Routes[]) {
+  private initializeRoutes(routes: express.Router[]) {
     routes.forEach(route => {
-      this.app.use(this.basePath, route.router);
+      this.app.use('/', route);
     });
   }
 
@@ -83,7 +81,7 @@ class App {
           version: '1.0.0',
           description: 'Example docs',
         },
-        basePath: this.basePath,
+        basePath: '/api/v1',
       },
       apis: ['swagger.yaml'],
     };

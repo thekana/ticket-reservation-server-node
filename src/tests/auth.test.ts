@@ -1,6 +1,6 @@
 import request from 'supertest';
 import App from '../app';
-import AuthRoute from '../routes/auth.route';
+import AuthRoute from '../routes/v1/auth.route';
 import { CreateUserDto } from '../dtos/users.dto';
 
 afterAll(async () => {
@@ -15,9 +15,9 @@ describe('Testing Auth', () => {
         password: 'q1w2e3r4!',
       };
       const authRoute = new AuthRoute();
-      const app = new App([authRoute]);
+      const app = new App([authRoute.router]);
 
-      return request(app.getServer()).post('/signup').send(userData);
+      return request(app.getServer()).post('api/v1/signup').send(userData);
     });
   });
 
@@ -29,10 +29,10 @@ describe('Testing Auth', () => {
       };
       process.env.JWT_SECRET = 'jwt_secret';
       const authRoute = new AuthRoute();
-      const app = new App([authRoute]);
+      const app = new App([authRoute.router]);
 
       return request(app.getServer())
-        .post('/login')
+        .post('api/v1/login')
         .send(userData)
         .expect('Set-Cookie', /^Authorization=.+/);
     });
@@ -41,10 +41,10 @@ describe('Testing Auth', () => {
   describe('[POST] /logout', () => {
     it('logout Set-Cookie Authorization=; Max-age=0', () => {
       const authRoute = new AuthRoute();
-      const app = new App([authRoute]);
+      const app = new App([authRoute.router]);
 
       return request(app.getServer())
-        .post('/logout')
+        .post('api/v1/logout')
         .expect('Set-Cookie', /^Authorization=\;/);
     });
   });
