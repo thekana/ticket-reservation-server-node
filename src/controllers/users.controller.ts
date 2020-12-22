@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { CreateUserDto } from '../dtos/users.dto';
+import { SignUpParams } from '../dtos/users.dto';
 import { User } from '../interfaces/users.interface';
 import UserService from '../services/users.service';
 import { RequestHandler } from 'express';
@@ -30,7 +30,7 @@ class UsersController {
 
   public createUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const userData: CreateUserDto = req.body;
+      const userData: SignUpParams = req.body;
       const createUserData: User = await this.userService.createUser(userData);
 
       res.status(201).json({ data: createUserData, message: 'created' });

@@ -3,6 +3,8 @@ import { User } from './users.interface';
 
 export interface DataStoredInToken {
   id: number;
+  username: string;
+  role: string;
 }
 
 export interface TokenData {

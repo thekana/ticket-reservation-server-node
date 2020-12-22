@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm';
 import bcrypt from 'bcrypt';
-import { CreateUserDto } from '../dtos/users.dto';
+import { SignUpParams } from '../dtos/users.dto';
 import HttpException from '../exceptions/HttpException';
 import { User } from '../interfaces/users.interface';
 import { UserEntity } from '../entity/users.entity';
@@ -22,12 +22,12 @@ class UserService {
     return findUser;
   }
 
-  public async createUser(userData: CreateUserDto): Promise<User> {
+  public async createUser(userData: SignUpParams): Promise<User> {
     if (isEmpty(userData)) throw new HttpException(400, "You're not userData");
 
     const userRepository = getRepository(this.users);
-    const findUser: User = await userRepository.findOne({ where: { email: userData.email } });
-    if (findUser) throw new HttpException(409, `You're email ${userData.email} already exists`);
+    const findUser: User = await userRepository.findOne({ where: { username: userData.username } });
+    if (findUser) throw new HttpException(409, `You're email ${userData.username} already exists`);
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
     return await userRepository.save({ ...userData, password: hashedPassword });

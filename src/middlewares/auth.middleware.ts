@@ -1,33 +1,20 @@
 import { NextFunction, Response } from 'express';
-import { getRepository } from 'typeorm';
 import jwt from 'jsonwebtoken';
 import HttpException from '../exceptions/HttpException';
 import { DataStoredInToken, RequestWithUser } from '../interfaces/auth.interface';
-import { UserEntity } from '../entity/users.entity';
 
 const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
   try {
-    const cookies = req.cookies;
-
-    if (cookies && cookies.Authorization) {
+    if (req.body.token) {
       const secret = process.env.JWT_SECRET;
-      const verificationResponse = jwt.verify(cookies.Authorization, secret) as DataStoredInToken;
-      const userId = verificationResponse.id;
-
-      const userRepository = getRepository(UserEntity);
-      const findUser = await userRepository.findOne(userId, { select: ['id', 'email', 'password'] });
-
-      if (findUser) {
-        req.user = findUser;
-        next();
-      } else {
-        next(new HttpException(401, 'Wrong authentication token'));
-      }
+      const claims = jwt.verify(req.body.token, secret) as DataStoredInToken;
+      req.user = { username: claims.username, id: claims.id, role: claims.role, password: '' };
+      next();
     } else {
-      next(new HttpException(404, 'Authentication token missing'));
+      next(new HttpException(401, 'Unauthorized'));
     }
   } catch (error) {
-    next(new HttpException(401, 'Wrong authentication token'));
+    next(new HttpException(401, 'Invalid token'));
   }
 };
 

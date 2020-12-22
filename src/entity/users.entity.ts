@@ -3,18 +3,22 @@ import { IsNotEmpty } from 'class-validator';
 import { User } from '../interfaces/users.interface';
 
 @Entity('users')
-@Unique(['email'])
+@Unique(['username'])
 export class UserEntity implements User {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   @IsNotEmpty()
-  email: string;
+  username: string;
 
   @Column()
   @IsNotEmpty()
   password: string;
+
+  @Column()
+  @IsNotEmpty()
+  role: string;
 
   @Column()
   @CreateDateColumn()
