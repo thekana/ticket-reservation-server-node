@@ -12,11 +12,13 @@ import { createConnection } from 'typeorm';
 import { dbConnection } from './database';
 import errorMiddleware from './middlewares/error.middleware';
 import { logger, stream } from './utils/logger';
+import * as http from 'http';
 
 class App {
   public app: express.Application;
   public port: string | number;
   public env: string;
+  private server: http.Server;
 
   constructor(routes: express.Router[]) {
     this.app = express();
@@ -30,8 +32,14 @@ class App {
     this.initializeErrorHandling();
   }
 
+  public close() {
+    this.server.close(() => {
+      console.log('Http server closed.');
+    });
+  }
+
   public listen() {
-    this.app.listen(this.port, () => {
+    this.server = this.app.listen(this.port, () => {
       logger.info(`🚀 App listening on the port ${this.port}`);
     });
   }

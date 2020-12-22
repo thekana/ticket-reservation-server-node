@@ -7,4 +7,11 @@ validateEnv();
 
 const app = new App([ApiV1Router]);
 
+process.on('SIGINT', () => {
+  console.info('SIGINT signal received.');
+  console.log('Closing http server.');
+  app.close();
+  process.exit(1);
+});
+
 app.listen();
