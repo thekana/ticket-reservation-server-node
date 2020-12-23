@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { SignUpParams } from '../dtos/users.dto';
-import { User } from '../interfaces/users.interface';
+import { User } from '../interfaces/model.interface';
 import UserService from '../services/users.service';
 import { RequestHandler } from 'express';
 

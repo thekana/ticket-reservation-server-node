@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { SignUpParams } from '../dtos/users.dto';
 import HttpException from '../exceptions/HttpException';
 import { DataStoredInToken, TokenData } from '../interfaces/auth.interface';
-import { User } from '../interfaces/users.interface';
+import { User, UserRole } from '../interfaces/model.interface';
 import { UserEntity } from '../entity/users.entity';
 import { isEmpty } from '../utils/util';
 
@@ -17,15 +17,14 @@ class AuthService {
     const userRepository = getRepository(this.users);
     const findUser: User = await userRepository.findOne({ where: { username: userData.username } });
     if (findUser) throw new HttpException(409, `${userData.username} already exists`);
-
     if (role && role.toUpperCase() === 'ORGANIZER') {
-      role = 'ORGANIZER';
+      role = UserRole.ORGANIZER;
     } else {
-      role = 'CUSTOMER';
+      role = UserRole.CUSTOMER;
     }
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
-    return await userRepository.save({ ...userData, password: hashedPassword, role: role });
+    return await userRepository.save({ ...userData, password: hashedPassword, role: role as UserRole });
   }
 
   public async login(userData: SignUpParams): Promise<{ token: string; user: User }> {

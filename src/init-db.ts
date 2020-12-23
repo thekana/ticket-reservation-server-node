@@ -5,6 +5,7 @@ import { logger } from './utils/logger';
 import { UserEntity } from './entity/users.entity';
 import bcrypt from 'bcrypt';
 import { getRepository } from 'typeorm';
+import { UserRole } from './interfaces/model.interface';
 
 let connection: Connection;
 
@@ -19,7 +20,7 @@ async function connectToDB() {
 }
 
 async function createAdmin() {
-  const adminUser = { username: 'admin', role: 'ADMIN' };
+  const adminUser = { username: 'admin', role: UserRole.ADMIN };
   const hashedPassword = await bcrypt.hash('password', 10);
   return await getRepository(UserEntity).insert({ ...adminUser, password: hashedPassword });
 }

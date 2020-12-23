@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { SignUpParams, LoginParams } from '../dtos/users.dto';
 import { RequestWithUser } from '../interfaces/auth.interface';
-import { User } from '../interfaces/users.interface';
+import { User } from '../interfaces/model.interface';
 import AuthService from '../services/auth.service';
 import { ResponseJson } from '../interfaces/response.interface';
 

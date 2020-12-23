@@ -1,6 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { IsNotEmpty } from 'class-validator';
-import { User } from '../interfaces/users.interface';
+import { User, UserRole } from '../interfaces/model.interface';
+import { EventEntity } from './events.entity';
+import { ReservationEntity } from './reservations.entity';
 
 @Entity('users')
 @Unique(['username'])
@@ -8,17 +10,17 @@ export class UserEntity implements User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'text' })
   @IsNotEmpty()
   username: string;
 
-  @Column()
+  @Column({ type: 'text' })
   @IsNotEmpty()
   password: string;
 
-  @Column()
+  @Column({ type: 'enum', enum: UserRole, default: UserRole.CUSTOMER })
   @IsNotEmpty()
-  role: string;
+  role: UserRole;
 
   @Column()
   @CreateDateColumn()
@@ -27,4 +29,10 @@ export class UserEntity implements User {
   @Column()
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => EventEntity, event => event.ownerID)
+  events: EventEntity[];
+
+  @OneToMany(() => ReservationEntity, reservation => reservation.userID)
+  reservations: ReservationEntity[];
 }

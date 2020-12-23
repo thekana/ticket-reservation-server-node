@@ -71,6 +71,7 @@ logger.add(
 );
 
 const stream = {
+  // morgan will write here
   write: (message: string) => {
     logger.info(message.substring(0, message.lastIndexOf('\n')));
   },

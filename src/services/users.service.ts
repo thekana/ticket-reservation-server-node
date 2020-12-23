@@ -2,7 +2,7 @@ import { getRepository } from 'typeorm';
 import bcrypt from 'bcrypt';
 import { SignUpParams } from '../dtos/users.dto';
 import HttpException from '../exceptions/HttpException';
-import { User } from '../interfaces/users.interface';
+import { User } from '../interfaces/model.interface';
 import { UserEntity } from '../entity/users.entity';
 import { isEmpty } from '../utils/util';
 
