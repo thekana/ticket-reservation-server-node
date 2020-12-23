@@ -26,29 +26,42 @@ const logger = winston.createLogger({
     }),
     logFormat,
   ),
-  transports: [
-    // info log setting
-    new winstonDaily({
-      level: 'info',
-      datePattern: 'YYYY-MM-DD',
-      dirname: logDir + '/info', // log file /logs/info/*.log in save
-      filename: `%DATE%.log`,
-      maxFiles: 30, // 30 Days saved
-      json: false,
-      zippedArchive: true,
-    }),
-    // error log setting
-    new winstonDaily({
-      level: 'error',
-      datePattern: 'YYYY-MM-DD',
-      dirname: logDir + '/error', // log file /logs/error/*.log in save
-      filename: `%DATE%.error.log`,
-      maxFiles: 30, // 30 Days saved
-      handleExceptions: true,
-      json: false,
-      zippedArchive: true,
-    }),
-  ],
+  transports: process.env.LOGGER
+    ? [
+        // info log setting
+        new winstonDaily({
+          level: 'info',
+          datePattern: 'YYYY-MM-DD',
+          dirname: logDir + '/info', // log file /logs/info/*.log in save
+          filename: `%DATE%.log`,
+          maxFiles: 30, // 30 Days saved
+          json: false,
+          zippedArchive: true,
+        }),
+
+        // warn log setting
+        new winstonDaily({
+          level: 'warn',
+          datePattern: 'YYYY-MM-DD',
+          dirname: logDir + '/warn', // log file /logs/info/*.log in save
+          filename: `%DATE%.log`,
+          maxFiles: 30, // 30 Days saved
+          json: false,
+          zippedArchive: true,
+        }),
+        // error log setting
+        new winstonDaily({
+          level: 'error',
+          datePattern: 'YYYY-MM-DD',
+          dirname: logDir + '/error', // log file /logs/error/*.log in save
+          filename: `%DATE%.error.log`,
+          maxFiles: 30, // 30 Days saved
+          handleExceptions: true,
+          json: false,
+          zippedArchive: true,
+        }),
+      ]
+    : [],
 });
 
 logger.add(

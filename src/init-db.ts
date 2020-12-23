@@ -4,10 +4,11 @@ import { dbConnection } from './database';
 import { logger } from './utils/logger';
 import { UserEntity } from './entity/users.entity';
 import bcrypt from 'bcrypt';
+import { getRepository } from 'typeorm';
 
 let connection: Connection;
 
-async function createAdmin() {
+async function connectToDB() {
   try {
     connection = await createConnection(dbConnection);
     logger.info('🟢 The database is connected.');
@@ -15,18 +16,31 @@ async function createAdmin() {
     logger.error(`🔴 Unable to connect to the database: ${e}.`);
     throw new Error('Failed to connect to the databases');
   }
-  const adminUser = { username: 'admin', role: 'ADMIN' };
-  const hashedPassword = await bcrypt.hash('password', 10);
-  return await connection.getRepository(UserEntity).save({ ...adminUser, password: hashedPassword });
 }
 
-createAdmin()
-  .then(r => {
-    console.log(r);
-    connection.close().then(() => console.log('Connection close'));
-  })
+async function createAdmin() {
+  const adminUser = { username: 'admin', role: 'ADMIN' };
+  const hashedPassword = await bcrypt.hash('password', 10);
+  return await getRepository(UserEntity).insert({ ...adminUser, password: hashedPassword });
+}
+
+async function main() {
+  await connectToDB();
+  try {
+    await createAdmin();
+  } catch (e) {
+    logger.warn(e.message);
+  }
+}
+
+main()
+  .then()
   .catch((e: Error) => {
     console.log(e);
     logger.error(e.message);
-    connection.close().then(() => console.log('Connection close'));
+  })
+  .finally(() => {
+    if (connection) {
+      connection.close().then(() => console.log('Connection close'));
+    }
   });

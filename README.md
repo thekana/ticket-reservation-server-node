@@ -19,7 +19,9 @@ POSTGRESQL_PASSWORD=postgres
 POSTGRESQL_DATABASE=ticket
 JWT_SECRET=jwt_secret
 PORT=9092
+LOGGER=
 ```
+Remove `LOGGER` to disable saving logs to `src/logs/`
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
